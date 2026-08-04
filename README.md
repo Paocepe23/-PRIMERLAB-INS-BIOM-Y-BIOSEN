@@ -141,7 +141,6 @@ justificarse pero para un sistema de monitoreo básico o portátil
 la adición de sensores debe evaluarse en función de la mejora real que 
 aporte frente a la complejidad adicional que introduce.
 
-## Conclusión
 
 ## Conclusión
 
@@ -160,7 +159,6 @@ presentan limitaciones asociadas a la respuesta asimétrica del elemento
 sensible y a su sensibilidad ante corrientes de aire ambientales ajenas 
 al proceso respiratorio del sujeto.
 
-## Referencias
 
 ## Referencias
 
