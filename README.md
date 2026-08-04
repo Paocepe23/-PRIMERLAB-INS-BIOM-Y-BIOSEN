@@ -90,6 +90,10 @@ un adulto sano en estado de reposo (12-20 resp/min) [1]. Durante la
 lectura en voz alta la frecuencia respiratoria disminuyó a 6.0 
 respiraciones por minuto.
 
+La comparación de ambas condiciones muestra una diferencia de 6.0 respiraciones por minuto entre el estado de reposo y la lectura en voz alta, correspondiente a una reducción aproximada del 50 % respecto al valor obtenido durante el reposo. En términos de frecuencia, el componente dominante pasó de 0.201 Hz en reposo a 0.100 Hz durante la verbalización.
+
+Sin embargo, esta diferencia debe interpretarse con precaución debido a que cada condición tuvo una duración de captura de únicamente 30 segundos. Además, durante la lectura en voz alta la respiración puede presentar un comportamiento menos periódico, por lo que la frecuencia dominante identificada mediante FFT puede no representar completamente todos los ciclos respiratorios realizados por el sujeto.
+
 Esto es consistente con lo reportado en la literatura. Bernardi 
 et al. [2] encontraron que en comparación con la respiración espontánea
 la frecuencia respiratoria disminuye de forma significativa durante la 
