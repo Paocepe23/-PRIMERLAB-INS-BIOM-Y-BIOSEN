@@ -124,6 +124,10 @@ ante la exhalación y decaimientos más lentos durante la inhalación y la
 disipación del gas atribuible a la dinámica de difusión de los gases y 
 al tiempo de respuesta propio del elemento sensible del sensor MQ.
 
+Una limitación importante del sistema implementado está relacionada con el principio de funcionamiento del sensor MQ-135. Aunque las variaciones de su señal pueden utilizarse para detectar indirectamente cambios asociados con el aire exhalado, el sensor no realiza una medición específica y directa de la concentración de CO₂. Su respuesta puede verse afectada por diferentes gases presentes en el ambiente, la temperatura, la humedad, la distancia respecto al sujeto y el movimiento del aire.
+
+Además, la dinámica de respuesta del sensor introduce un retardo y una respuesta temporal que pueden modificar la morfología de la señal respiratoria. Esto resulta particularmente relevante durante la verbalización, donde existen cambios rápidos en el flujo de aire y períodos de exhalación prolongados. Por esta razón, el sistema desarrollado resulta adecuado para demostrar la posibilidad de extraer información relacionada con el patrón respiratorio, pero presenta limitaciones para realizar una medición clínica precisa de la frecuencia respiratoria o de la concentración de CO₂.
+
 El uso de múltiples sensores por ejemplo combinando el sensor de gas con 
 un sensor de movimiento torácico  puede ser banda piezoeléctrica o acelerómetro, 
 presentaría como ventaja la posibilidad de contrastar dos variables 
@@ -143,6 +147,8 @@ clínicas donde se requiere alta confiabilidad esta redundancia podría
 justificarse pero para un sistema de monitoreo básico o portátil 
 la adición de sensores debe evaluarse en función de la mejora real que 
 aporte frente a la complejidad adicional que introduce.
+
+
 
 
 ## Conclusión
