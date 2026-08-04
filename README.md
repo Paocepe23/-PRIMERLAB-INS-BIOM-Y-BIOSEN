@@ -3,7 +3,7 @@
 ## Objetivos
 
 ### Objetivo General
-Evaluar los cambios que se presentan en ell patrón respiratorio cuando se esta hablando y cuando se esta en reposo..
+Evaluar los cambios que se presentan en el patrón respiratorio cuando se esta hablando y cuando se esta en reposo.
 
 ### Objetivos Específicos
 Reconocer las variables físicas principalmente involucradas en el proceso respiratorio.
@@ -12,43 +12,170 @@ Identificar tareas de verbalización a partir del patrón o la frecuencia respir
 
 ## Metodología
 
-Se seleccionó un sensor de gas tipo MQ para la detección indirecta del patrón 
-respiratorio, aprovechando la variación de concentración de CO2 en el aire 
-exhalado…….
+Se llevó a cabo una revisión bibliográfica sobre el proceso respiratorio y las variables físicas asociadas a su medición, con el fin de seleccionar el sensor más adecuado. Se seleccionó un sensor de gas de la serie MQ en este caso MQ 135, cuyo principio de funcionamiento se basa en la variación de la resistencia de un elemento sensible ante cambios en la concentración de gases del aire. Se aprovechó este principio para detectar de forma indirecta el patrón respiratorio, a partir de las variaciones en la concentración de dióxido de carbono (CO2) presente en el aire exhalado por el sujeto de prueba.
+El sensor se alimentó con un voltaje de 5 VDC, conectándose su pin VCC a la salida de 5V del Arduino y su pin GND a tierra. La salida analógica del sensor (pin AO) se conectó al pin analógico A0 del Arduino, utilizado posteriormente para la digitalización de la señal mediante el conversor análogo-digital (ADC) integrado de 10 bits (resolución 0-1023) de la placa.
+
+Se programó la placa Arduino UNO para realizar lecturas periódicas del pin A0 cada 20 ms (frecuencia de muestreo aproximada de 50 Hz), enviando cada valor leído a través del puerto serial a una tasa de 9600 baudios. Previo a la toma de datos  se dejó estabilizar térmicamente el sensor durante un período de calentamiento (warm-up) de aproximadamente 2 a 3 minutos, tiempo necesario para que el elemento sensible alcanzara una lectura base estable, según lo recomendado para sensores de esta familia.
+Una vez estabilizada la señal, se ubicó el sensor a una distancia de entre 1 y 2centímetros de la nariz y boca del sujeto de prueba  con el fin de captar las variaciones de concentración de CO2 producidas durante la respiración.
+
+Se registraron dos condiciones experimentales, cada una con una duración de captura de 30 segundos:
+Reposo: el sujeto de prueba respiró de manera normal, sin hablar, mientras se contabilizó manualmente el número de ciclos respiratorios (inhalación-exhalación) durante el intervalo de captura.
+Verbalización: el sujeto de prueba leyó en voz alta un texto durante el mismo intervalo de tiempo, manteniendo el sensor en la misma posición.
+Para cada condición, la captura de datos se realizó mediante un script desarrollado en Python, empleando la librería pyserial para establecer comunicación con el puerto serial del Arduino. Los datos capturados (tiempo y valor ADC) se almacenaron en archivos con formato .csv.
+
+El procesamiento de las señales se realizó en el entorno de MATLAB Online, dado que la captura en tiempo real desde MATLAB no fue posible al no contar este entorno con acceso a los puertos seriales locales. Los archivos .csv generados en la etapa de adquisición se cargaron en MATLAB mediante la función readtable.
+Se eliminaron los primeros 0.1 segundos de cada señal, correspondientes a una lectura artefacto generada al inicio de la comunicación serial  (esto indicado por el profesor). Posteriormente se aplicó un filtro digital pasa-bajas tipo Butterworth de cuarto orden, con una frecuencia de corte de 1 Hz, mediante las funciones butter y filtfilt  con el objetivo de atenuar componentes de alta frecuencia no asociados al proceso respiratorio (rango fisiológico esperado: 0.1-0.5 Hz).
+Sobre la señal filtrada se calculó la Transformada Rápida de Fourier (FFT) mediante la función fft, obteniéndose la representación en el dominio de la frecuencia. Se identificó la frecuencia dominante correspondiente al pico de mayor magnitud dentro del espectro, excluyendo el rango inferior a 0.1 Hz para evitar la interferencia de componentes de tendencia  de baja frecuencia propios de la estabilización del sensor. A partir de la frecuencia dominante obtenida, se calculó la frecuencia respiratoria en respiraciones por minuto  multiplicando dicho valor por 60.
+
+
 
 ## Resultados
 
-[Aquí van las gráficas: señal cruda, señal filtrada, y espectro de 
-frecuencia, para cada condición — reposo y habla]
+### Datos obtenidos en reposo
+<img width="700" height="432" alt="image" src="https://github.com/user-attachments/assets/656bf783-4a62-4b28-9a39-f5103339d6a3" />
 
-**Condición de reposo:** Se obtuvo una frecuencia dominante de 0.366 Hz, 
-equivalente a 22.0 respiraciones por minuto.
+<img width="651" height="430" alt="image" src="https://github.com/user-attachments/assets/6d273878-f07c-49c6-83dd-b71e17ebd27b" />
 
-**Condición de habla:** [pendiente resultado numérico del análisis]
+
+<img width="666" height="431" alt="image" src="https://github.com/user-attachments/assets/540fc841-9351-4d98-9bf5-02ad5a5dd098" />
+
+
+<img width="612" height="96" alt="image" src="https://github.com/user-attachments/assets/9577eb16-5dcf-4945-9185-f6d1827881dc" />
+
+### Datos obtenidos en lectura 
+
+
+<img width="672" height="438" alt="image" src="https://github.com/user-attachments/assets/28d6a183-77f8-4cfc-abdb-03c99ccbb46e" />
+
+
+<img width="666" height="432" alt="image" src="https://github.com/user-attachments/assets/e4f5e9fd-0d25-4838-aac7-6bcc36d7930c" />
+
+
+<img width="653" height="435" alt="image" src="https://github.com/user-attachments/assets/bdc8b278-2cd3-4130-a2e3-a00c7d216578" />
+
+<img width="630" height="66" alt="image" src="https://github.com/user-attachments/assets/8dadfce5-04c7-4e28-a01b-48bb2cc5239e" />
+
+
+
+
+**Condición de reposo:** Se obtuvo una frecuencia dominante de 0.201 Hz, 
+equivalente a 12.0 respiraciones por minuto.
+
+**Condición de habla:** Se obtuvo una frecuencia dominante de 0.100 Hz, 
+equivalente a 6.0 respiraciones por minuto
+
+Para la condición de **reposo**, se obtuvo una frecuencia de muestreo estimada 
+de 50.00 Hz. El análisis espectral de la señal filtrada evidenció una 
+frecuencia dominante de 0.201 Hz, equivalente a una frecuencia respiratoria 
+estimada de 12.0 respiraciones por minuto, valor que se encuentra dentro 
+del rango normal.
+
+Para la condición de **lectura en voz alta**, se obtuvo una frecuencia de 
+muestreo estimada de 49.99 Hz. El análisis espectral evidenció una frecuencia 
+dominante de 0.100 Hz, equivalente a una frecuencia respiratoria estimada 
+de 6.0 respiraciones por minuto.
+
+Se observó una disminución de la frecuencia respiratoria durante la 
+condición de lectura respecto a la condición de reposo (de 12.0 a 
+6.0 respiraciones/min), lo cual se discute en la siguiente parte.
 
 ## Discusión
 
 **¿Son los patrones respiratorios y frecuencias respiratorias iguales o 
 diferentes en cada caso? ¿A qué se debe esto?**
 
-[Responder comparando los valores obtenidos, apoyándose en literatura 
-sobre el efecto del habla en el patrón respiratorio]
+Se encontraron diferencias marcadas entre las dos condiciones evaluadas. 
+En reposo se obtuvo una frecuencia respiratoria de 12.0 respiraciones 
+por minuto valor que se ubica dentro del rango normal reportado para 
+un adulto sano en estado de reposo (12-20 resp/min) [1]. Durante la 
+lectura en voz alta la frecuencia respiratoria disminuyó a 6.0 
+respiraciones por minuto.
+
+Esto es consistente con lo reportado en la literatura. Bernardi 
+et al. [2] encontraron que en comparación con la respiración espontánea
+la frecuencia respiratoria disminuye de forma significativa durante la 
+lectura en voz alta y el habla libre  desplazándose a valores cercanos 
+a 0.07 Hz (equivalentes a aproximadamente 4 respiraciones por minuto), 
+resultado muy similar al obtenido en la presente práctica (0.100 Hz, 
+6.0 resp/min).
+
+Esta disminución se explica fisiológicamente por el hecho de que durante 
+el habla el control de la respiración deja de ser predominantemente 
+automático (regulado por el tallo cerebral en función de los niveles de 
+CO2 y O2) y pasa a subordinarse a las demandas del acto de fonación. 
+Para producir frases completas de forma inteligible el hablante requiere 
+inhalaciones más profundas y espaciadas seguidas de exhalaciones 
+prolongadas y controladas que sostienen el flujo de aire necesario para 
+la producción de la voz a lo largo de toda la frase [3]. Como consecuencia 
+el número de ciclos respiratorios por minuto disminuye aunque el volumen 
+de aire movilizado  tienda a aumentar.
 
 **¿Cuáles serían las ventajas y desventajas de emplear múltiples sensores 
 para el monitoreo del proceso respiratorio? ¿Cuáles podrían ser las razones?**
 
-[Responder — aquí es un buen lugar para mencionar la limitación de la 
-respuesta asimétrica del sensor de gas que identificamos ayer, y cómo 
-un sensor adicional de movimiento (banda piezoeléctrica) podría 
-complementarlo]
+El sistema desarrollado empleó un único sensor de gas para la detección 
+indirecta del patrón respiratorio a partir de las variaciones en la 
+concentración de CO2 exhalado. Se observó que la señal obtenida presentó 
+una respuesta asimétrica con incrementos de voltaje relativamente rápidos 
+ante la exhalación y decaimientos más lentos durante la inhalación y la 
+disipación del gas atribuible a la dinámica de difusión de los gases y 
+al tiempo de respuesta propio del elemento sensible del sensor MQ.
+
+El uso de múltiples sensores por ejemplo combinando el sensor de gas con 
+un sensor de movimiento torácico  puede ser banda piezoeléctrica o acelerómetro, 
+presentaría como ventaja la posibilidad de contrastar dos variables 
+fisiológicas distintas composición del aire exhalado y movimiento mecánico 
+de la caja torácica, lo cual permitiría validar de forma cruzada la 
+frecuencia respiratoria obtenida y reducir la incertidumbre asociada a las 
+limitaciones individuales de cada sensor. De igual forma  un sensor de movimiento 
+podría capturar de forma más fiel la morfología de la señal respiratoria
+al no depender de fenómenos de difusión gaseosa.
+
+Como desventaja el uso de múltiples sensores incrementa la complejidad 
+del sistema de adquisición tanto en términos de acondicionamiento de 
+señal cada sensor puede requerir distintas etapas de amplificación y 
+filtrado como de sincronización temporal de los datos además de 
+incrementar el costo y el consumo energético del sistema. Para aplicaciones 
+clínicas donde se requiere alta confiabilidad esta redundancia podría 
+justificarse pero para un sistema de monitoreo básico o portátil 
+la adición de sensores debe evaluarse en función de la mejora real que 
+aporte frente a la complejidad adicional que introduce.
 
 ## Conclusión
 
-[Un solo párrafo breve, reflexionando sobre qué variables físicas son 
-más adecuadas para detectar anomalías respiratorias]
+## Conclusión
+
+A partir de los resultados obtenidos se concluye que la frecuencia 
+respiratoria de un individuo sano varía significativamente entre las 
+condiciones de reposo y verbalización disminuyendo durante esta última 
+como consecuencia de la subordinación del control respiratorio a las 
+demandas del habla. En cuanto a la variable física más adecuada para la 
+detección de posibles anomalías respiratorias se considera que el 
+movimiento mecánico de la caja torácica medido mediante sensores de 
+presión, piezoeléctricos o de inductancia resulta más confiable que la 
+variación en la concentración de gases exhalados dado que refleja de 
+forma más directa y con menor retardo la dinámica del ciclo respiratorio 
+mientras que los sensores de gas como el empleado en esta práctica
+presentan limitaciones asociadas a la respuesta asimétrica del elemento 
+sensible y a su sensibilidad ante corrientes de aire ambientales ajenas 
+al proceso respiratorio del sujeto.
+
+## Referencias
 
 ## Referencias
 
 [1] C. G. Lausted y A. T. Johnson, "Respiratory System," en Biomedical 
+Engineering Fundamentals, J. D. Bronzino, Ed. Boca Raton, FL, USA: CRC 
+Press, 2006. https://doi.org/10.1201/9781420003857
+
+[2] L. Bernardi, J. Wdowczyk-Szulc, C. Valenti, S. Castoldi, C. Passino, 
+G. Spadacini, y P. Sleight, "Effects of controlled breathing, mental 
+activity and mental stress with or without verbalization on heart rate 
+variability," Journal of the American College of Cardiology, vol. 35, 
+no. 6, pp. 1462–1469, May 2000. https://doi.org/10.1016/S0735-1097(00)00595-7
+
+[3] L. L. Kuhlmann y J. Iwarsson, "Effects of Speaking Rate on Breathing 
+and Voice Behavior," Journal of Voice, vol. 38, no. 2, pp. 346–356, 2024. 
+https://doi.org/10.1016/j.jvoice.2021.09.005
 Engineering Fundamentals, J. D. Bronzino, Ed. Boca Raton, FL, USA: CRC 
 Press, 2006.
