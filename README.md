@@ -11,6 +11,7 @@ Desarrollar un sistema que extraiga el patrón respiratorio y la frecuencia resp
 Identificar tareas de verbalización a partir del patrón o la frecuencia respiratoria.
 
 ## Metodología
+Para la parte fisica se utilizó una mascara inhaladora para poder contener con mayor facilidad el co2 generado por el sujeto de prueba, ya que al dejar el sensor expuesto en el ambiente podria modificar la toma de los datos. Además de esto se puso en un ponto fijo para evitar aun mas el ruido por parte de la manipulación del sensor, posterior a este paso se conecta el sensor a nuestra placa con base a los pines y requeridos para prosesar las señales respiratorias.
 
 Se llevó a cabo una revisión bibliográfica sobre el proceso respiratorio y las variables físicas asociadas a su medición, con el fin de seleccionar el sensor más adecuado. Se seleccionó un sensor de gas de la serie MQ en este caso MQ 135, cuyo principio de funcionamiento se basa en la variación de la resistencia de un elemento sensible ante cambios en la concentración de gases del aire. Se aprovechó este principio para detectar de forma indirecta el patrón respiratorio, a partir de las variaciones en la concentración de dióxido de carbono (CO2) presente en el aire exhalado por el sujeto de prueba.
 El sensor se alimentó con un voltaje de 5 VDC, conectándose su pin VCC a la salida de 5V del Arduino y su pin GND a tierra. La salida analógica del sensor (pin AO) se conectó al pin analógico A0 del Arduino, utilizado posteriormente para la digitalización de la señal mediante el conversor análogo-digital (ADC) integrado de 10 bits (resolución 0-1023) de la placa.
@@ -26,8 +27,6 @@ Para cada condición, la captura de datos se realizó mediante un script desarro
 El procesamiento de las señales se realizó en el entorno de MATLAB Online, dado que la captura en tiempo real desde MATLAB no fue posible al no contar este entorno con acceso a los puertos seriales locales. Los archivos .csv generados en la etapa de adquisición se cargaron en MATLAB mediante la función readtable.
 Se eliminaron los primeros 0.1 segundos de cada señal, correspondientes a una lectura artefacto generada al inicio de la comunicación serial  (esto indicado por el profesor). Posteriormente se aplicó un filtro digital pasa-bajas tipo Butterworth de cuarto orden, con una frecuencia de corte de 1 Hz, mediante las funciones butter y filtfilt  con el objetivo de atenuar componentes de alta frecuencia no asociados al proceso respiratorio (rango fisiológico esperado: 0.1-0.5 Hz).
 Sobre la señal filtrada se calculó la Transformada Rápida de Fourier (FFT) mediante la función fft, obteniéndose la representación en el dominio de la frecuencia. Se identificó la frecuencia dominante correspondiente al pico de mayor magnitud dentro del espectro, excluyendo el rango inferior a 0.1 Hz para evitar la interferencia de componentes de tendencia  de baja frecuencia propios de la estabilización del sensor. A partir de la frecuencia dominante obtenida, se calculó la frecuencia respiratoria en respiraciones por minuto  multiplicando dicho valor por 60.
-
-
 
 ## Resultados
 
