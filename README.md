@@ -36,7 +36,7 @@ Sobre la señal filtrada se calculó la Transformada Rápida de Fourier (FFT) me
 <img width="651" height="430" alt="image" src="WhatsApp Image 2026-08-04 at 7.46.38 PM.jpeg" />
 
 
-<img width="666" height="431" alt="image" src="https://github.com/user-attachments/assets/540fc841-9351-4d98-9bf5-02ad5a5dd098" />
+<img width="666" height="431" alt="image" src="WhatsApp Image 2026-08-04 at 7.46.58 PM.jpeg" />
 
 
 <img width="612" height="96" alt="image" src="https://github.com/user-attachments/assets/9577eb16-5dcf-4945-9185-f6d1827881dc" />
